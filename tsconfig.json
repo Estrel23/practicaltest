@@ -6,22 +6,18 @@
     "target": "es2017",
     "module": "commonjs",
     "jsx": "react",
-    
     "strict": true,
     "paths": {
       "@/*": [
         "./*"
       ]
     }
-    
   },
   "include": [
     "**/*.ts",
     "**/*.tsx",
     ".expo/types/**/*.ts",
-    "expo-env.d.ts"
-  ],
-  
-  
+    "expo-env.d.ts",
+    "declarations.d.ts"  
+  ]
 }
-

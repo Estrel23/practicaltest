@@ -10,6 +10,7 @@ import {
   Alert,
   TouchableOpacity,
   ScrollView,
+  Image,
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import DateTimePicker from "@react-native-community/datetimepicker";
@@ -21,18 +22,28 @@ import {
   initializeDB,
   Person,
 } from "@/database"; // Import initializeDB
+import { useNavigation } from "expo-router";
 
 const Dashboard = () => {
+  const navigation = useNavigation(); // Get navigation object
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [gender, setGender] = useState("Select Gender");
+  const [relation, setRelation] = useState("Relationship");
+  const [marital, setMarital] = useState("Marital Status");
+  const [citizen, setCitizen] = useState("Citizenship");
   const [date, setDate] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [persons, setPersons] = useState<Person[]>([]);
   const [selectedPerson, setSelectedPerson] = useState<number | null>(null);
   const [editingPersonId, setEditingPersonId] = useState<number | null>(null); // Track if updating a person
+
+  const handleDashboard = () => {
+    // code to handle the browse action
+    (navigation as any).navigate("furtherInfor");
+  };
 
   const onChangeDate = (event: any, selectedDate?: Date) => {
     const currentDate = selectedDate || date;
@@ -61,6 +72,7 @@ const Dashboard = () => {
       !phone ||
       !email ||
       gender === "Select Gender"
+      
     ) {
       Alert.alert("Error", "Please fill in all fields correctly.");
       return;
@@ -131,9 +143,16 @@ const Dashboard = () => {
   };
 
   return (
+    
     <ScrollView>
+      
       <View style={styles.container}>
-        <Text style={styles.header}>Data Entry Form</Text>
+      <Image
+          source={require('@/assets/images/OIP.jpeg')}
+          style={styles.Image}
+        />
+        <Text style={styles.header}>B. PERSONAL INFORMATION</Text>
+
 
         <TextInput
           style={styles.input}
@@ -181,6 +200,50 @@ const Dashboard = () => {
           <Picker.Item label="Other" value="other" />
         </Picker>
 
+        <Picker
+          selectedValue={relation}
+          onValueChange={(itemValue) => setRelation(itemValue)}
+          style={styles.picker}
+        >
+          <Picker.Item label={"Relationship"} value="" />
+          <Picker.Item label="Head of Household" value="head of household" />
+          <Picker.Item label="Husband" value="husband" />
+          <Picker.Item label="Wife" value="wife" />
+          <Picker.Item label="Own Son" value="own son" />
+          <Picker.Item label="Own Daughter" value="own daughter" />
+          <Picker.Item label="Son/daughter in-law" value="son/daughter in-law" />
+          <Picker.Item label="Adopted/Step child" value="adopted/step child" />
+          <Picker.Item label="Father/Mother" value="father/mother" />
+          <Picker.Item label="Grandgreat-grand child" value="grandgreat-grand child" />
+          <Picker.Item label="Father/Mother in-law" value="father/mother in-law" />
+          <Picker.Item label="Brother/Sister in-lw" value="brother/sister in-law" />
+          <Picker.Item label="Other Relative" value="other relative" />
+          <Picker.Item label="Non-relative" value="non-relative" />
+        </Picker>
+
+        <Picker
+          selectedValue={marital}
+          onValueChange={(itemValue) => setMarital(itemValue)}
+          style={styles.picker}
+        >
+          <Picker.Item label={"Marital Status"} value="" />
+          <Picker.Item label="Never Married" value="never married" />
+          <Picker.Item label="Married/Living Together" value="married/living together" />
+          <Picker.Item label="Separated" value="separated" />
+          <Picker.Item label="Divorced" value="divorced" />
+          <Picker.Item label="Widowed" value="widowed" />
+        </Picker>
+
+        <Picker
+          selectedValue={citizen}
+          onValueChange={(itemValue) => setCitizen(itemValue)}
+          style={styles.picker}
+        >
+          <Picker.Item label={"Citizenship"} value="" />
+          <Picker.Item label="PNG Citizen" value="PNG citizen" />
+          <Picker.Item label="Non-PNG Citizen" value="Non-PNG citizen" />
+          </Picker>
+
         <View>
           <Button
             title="Select Date of Birth"
@@ -199,10 +262,15 @@ const Dashboard = () => {
           </Text>
         </View>
 
+         
+  
         <Button
           title={selectedPerson ? "Update" : "Submit"}
           onPress={handleSubmit}
         />
+        <TouchableOpacity style={styles.button} onPress={() => handleDashboard()}>
+          <Text style={styles.buttonText2}>NEXT</Text>
+        </TouchableOpacity>
 
         {/* Table to display records */}
         <View style={styles.tableContainer}>
@@ -238,6 +306,8 @@ const Dashboard = () => {
                 >
                   <Text style={styles.buttonText}>Delete</Text>
                 </TouchableOpacity>
+
+                
               </View>
             </View>
           ))}
@@ -247,20 +317,59 @@ const Dashboard = () => {
   );
 };
 
+//... (styles remain unchange)
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: "#f2f2f2",
+    backgroundColor: "#87CEEB",
     justifyContent: "center",
   },
+
+  button: {
+    top: 20,
+    backgroundColor: "#2085FFFF",
+    borderRadius: 12,
+    paddingVertical: 10,
+    paddingHorizontal: 50,
+    marginBottom: 20,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  buttonText: {
+      color: "#000000",
+      fontSize: 18,
+      fontWeight: "600",
+      textAlign: "center",
+  },
+  buttonText2: {
+    color: "#FFD000FF",
+    fontSize: 18,
+    fontWeight: "600",
+    textAlign: "center",
+  },
+
+  Image: {
+    width: 300,
+    height: 230,
+    alignSelf:"center",
+    marginBottom: 20,
+    marginTop:10,
+    borderRadius: 10,
+  },
+
   header: {
     fontSize: 24,
     fontWeight: "bold",
-    color: "#333",
+    color: "#00008B",
     textAlign: "center",
     marginBottom: 30,
   },
+
   input: {
     height: 50,
     borderColor: "#ccc",
@@ -281,20 +390,25 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 12,
     backgroundColor: "#fff",
-    marginBottom: 20,
+    marginBottom: 20, 
+    
   },
+
   dateText: {
     marginTop: 10,
     marginBottom: 20,
     fontSize: 16,
     color: "#666",
   },
+
   personContainer: {
     marginBottom: 20,
   },
+
   tableContainer: {
     marginTop: 20,
   },
+
   tableHeader: {
     flexDirection: "row",
     backgroundColor: "#f1f1f1",
@@ -302,24 +416,29 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: "#ccc",
   },
+
   tableHeaderText: {
     flex: 1,
     fontWeight: "bold",
     textAlign: "center",
   },
+
   tableRow: {
     flexDirection: "row",
     padding: 10,
     borderBottomWidth: 1,
     borderBottomColor: "#ccc",
   },
+
   tableRowText: {
     flex: 1,
     textAlign: "center",
   },
+
   actionButtons: {
     flexDirection: "row",
   },
+  
   updateButton: {
     backgroundColor: "#4CAF50",
     padding: 5,
@@ -327,7 +446,6 @@ const styles = StyleSheet.create({
     marginRight: 5,
   },
   deleteButton: { backgroundColor: "#F44336", padding: 5, borderRadius: 5 },
-  buttonText: { color: "#fff", fontWeight: "bold" },
 });
 
 export default Dashboard;
